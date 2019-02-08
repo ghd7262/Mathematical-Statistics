@@ -1,4 +1,4 @@
-#Math181A WI2019 (Mathematical Statistics) HW8 R Problems
+#Math181A WI2019 (Mathematical Statistics)
 #Find MLE CI for a geometric distribution with x=1,2,3,... Note: 1 is added after ngeom to start from x=1
 trials=10000                       
 z=qnorm(0.05,lower=F)              #a=0.05
