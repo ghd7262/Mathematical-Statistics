@@ -27,3 +27,4 @@ new_sd = 2.6/sqrt(n)                                #Notice E(xbar) = H_0, so we
 
 #Step 3: Graph the critical region
 ub = qnorm(0.01, H_0, new_sd, lower = F)
+#ub = 660.0779 = H_1 > 660 = H_0, so reject H_0!
