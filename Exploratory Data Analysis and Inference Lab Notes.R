@@ -11,3 +11,6 @@ attach(data)
 age                                                 #to 'attach' data to the variable called age
 age[1] <- 28                                        #assign 28 to the first element of age
 detach(data)
+
+summary(dat$age)                                    #prints a summary of data$age
+hist(data$age)                                      #graph histogram
