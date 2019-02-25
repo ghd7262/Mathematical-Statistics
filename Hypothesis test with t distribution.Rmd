@@ -1,0 +1,47 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+
+```{r}
+t.test(cars, conf.level = 0.95) #conduct t test with 95% confidence
+
+n = 14
+for(i in 1:n){ #create a for loop 
+  print(qt(0.07, df=i, lower=F) - qt(0.14, df=i, lower=F))
+}
+
+for(i in 1:n){
+  print(qt(0.14, df=i, lower=F) - qt(0.21, df=i, lower=F))
+}
+```
+```{r}
+pt(1, df=2) - pt(-1, df=2)
+pt(1, df=3, lower=T) - pt(-1, df=3, lower=T)
+```
+
+```{r}
+qt(0.08, df=1, lower=F)
+```
+```{r}
+qt(0.07, df=1, lower=F) - qt(0.14, df=1, lower=F)
+
+qt(0.14, df=1, lower=F) - qt(0.21, df=1, lower=F)
+```
+
+```{r}
+#If you look at a bottle of ibuprofen, it will likely list the amt of medicine per pill (usally 200mg). Of course,
+#this is only an avg, and if you carefully measured the amt from pill to pill you would get a normal distribution.
+#The spread of this distribution is very important because giving too much or too little medicine can be dangerous.
+#Suppose that the sd = 10mg based on current manufacturing processes. You've come up with a new way to create the pills
+#that you believe will increase the precision of the dosage. To check this claim, you produce a bunch of pills and randomly
+#select some to measure the dosage. You get values c(206.5, 198.9, 205.2, 192, 199.5, 182.5, 191.9, 197.6, 190.7, 186.8,
+#187.3, 192)
+
+data = c(206.5, 198.9, 205.2, 192, 199.5, 182.5, 191.9, 197.6, 190.7, 186.8, 187.3, 192)
+mean = mean(data)
+t.test(data, alternative = "greater", mu = mean, conf.level = 0.96)
+```
