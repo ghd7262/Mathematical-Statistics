@@ -1,0 +1,56 @@
+---
+title: "Finding C using BCR, geometric distribution and Yule-Simon Distribution"
+author: "Dukki Hong"
+date: "3/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Mathematical Statistics I: 
+Approximate the significance level of C when c = 0.003 and n = 4. Note c = 0.003 < pie from i = 1 to 4 of xi(1-xi). H0 = alpha = beta = 2 vs. H1 = alpha = beta = 6 given a beta distribution (standard)
+
+```{r}
+p = rep(1,10000)
+for(j in 1:10000){
+  x = rbeta(4,2,2)
+  for(i in 1:4){
+    p[j] = x[i]*(1-x[i])*p[j]
+  }
+}
+sum(p > 0.003)/10000
+
+```
+type I value is approximately 0.08
+
+
+You and a friend are arguing about what model X better explains your data. You claim H0: X ~ Geom(3/4), while your friend is excited about some obscure distribution H1: X ~ Yule-Simon(p=2). Using Wikipedia, you see that the pmf for the Yule-Simon distribution is f(x;p) = (p*p!*(x-1)!)/(x+p)!, where x = 1,2,3,... (where p is some integer).
+a. Using R, draw a plot of the pmfs for each hypothesis on {1,...,10}. Use black filled-in circles for the H0 distribution, and red ones for H1. Include your code and a sketch of both pmfs on the same set of axes. Note that the R geom quartet only counts the number of failures leading to the success, which is different than how we defined the Geometric distribution, so you'll need to fiddle with it to give the results we're expecting. Type ?dgeom to learn more.
+
+
+```{r}
+
+c = c(1:10) #x values/coordinates
+
+YSFunc = function(x,p){ #Define the Yule-Simon Distribution
+  return (p*factorial(p)*factorial(x-1)/factorial(x+p))
+}
+
+YSDensity = YSFunc(c,2) #p is given as 2
+plot(c, dgeom(c-1,3/4), col="black", pch=16, main="pmf for H0=Geom(3/4) and H1=Yule-Simon(p=2)", xlab = "x values", ylab="density")
+points(c, YSDensity, col="red", pch=16)
+
+```
+
+# Same as above but alternatively using for loop:
+```{r}
+a = c() #create a vector
+for(i in 1:10){
+  a[i] = 2*2*factorial(i-1)/factorial(i+2) #in the vector 'a', plug in values of i which range from 1 to 10
+}
+
+plot(dgeom(c(1:10)-1,3/4), col="black", pch=16) #plot the geometric distribution
+points(a, col="red", pch=16) #plot the points from the Y-S distribution
+```
