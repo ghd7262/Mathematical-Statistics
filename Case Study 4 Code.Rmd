@@ -1,0 +1,149 @@
+---
+title: "Case Study 4"
+output: html_notebook
+---
+
+### Import Data and install/load relevant packages
+```{r}
+data = read.table("data.txt", head=T)
+data = data[order(data['density']),]
+library(L1pack) #Library for LAD = Least Absolute Deviations Regression Line
+library(quantreg) #Library for Quantile Regression line
+```
+
+## Scenario 1: Fitting
+
+### Use the data to fit the gain, or a transformation of gain, to density. Try sketching the least squares line on a scatter plot.
+
+### Do the residuals indicate any problems with the fit?
+
+
+```{r}
+title = "Scatter plot of the Density and Gain"
+y.axis = "Gain"
+x.axis = expression('Density (g/cm'^3*')')
+plot(data, main= title, pch=1, cex=1, col="orangered1", ylab=y.axis, xlab=x.axis) #Scatter plot of the data
+fit = lm(gain~density, data) #Calculate the Least Squares Regression line for the given data
+abline(fit, col="blue1") #Try to fit the Least Squares Regression line to the data
+legend('topright', legend=c('Least Square Regression Line', 'Data'), col=c("blue1","orangered1"), lty=1)
+```
+
+### Since the data is looking like that of an exponential distribution, we will take the log of the gain variables to achieve a linear graph (to satisfy Least Squares Line condition). Moreover the data does not follow the line drawn across the graph.
+
+
+```{r}
+title1 = "Scatter plot of Density and log(Gain)"
+y.axis1 = "log(Gain)"
+log.data = data.frame(data$density, log(data$gain)) #Create a new data set where the we take the log of the gain variables
+plot(log.data, main=title1, ylab=y.axis1, xlab=x.axis, pch=1, cex=1, col="darkorange")
+fit.log = lm(log.data.gain.~data.density, log.data)
+abline(fit.log, col="blue1")
+legend('topright', legend=c('Least Square Regression Line', 'Data'), col=c("blue1","darkorange"), lty=1)
+```
+
+### Since there are replicated gain measurements, we will average thereplicate measurements to create a single variable that corresponds to the variables (explanatory and response variables need to be linear to meet the conditions required for Least Squares Line). Notice that the data fits to the regression line.
+
+
+```{r}
+title2 = "Scatter plot of the average of Density and log(Gain)"
+mean.log.data = aggregate.data.frame(list(gain=log.data$log.data.gain.),list(density=log.data$data.density), FUN=mean)
+plot(mean.log.data, main=title2, xlab=x.axis, ylab=y.axis1, pch=1, cex=1, col="darkgoldenrod1")
+fit.mean.log = lm(gain~density, mean.log.data)
+abline(fit.mean.log, col="blue1")
+legend('topright', legend=c('Least Square Regression Line', 'Data'), col=c("blue1","darkorange"), lty=1)
+```
+
+### Perform least squares regression to fit the line to the data
+
+```{r}
+LS = lm(gain~density, data=mean.log.data) #Least Square regression
+LAD = lad(gain~density, data=mean.log.data) #Least Absolute Deviations Regression
+QRL = rq(gain~density, data=mean.log.data) #Quantile Regression Line
+plot(log.data, main=title, xlab=x.axis, ylab=y.axis1)
+legend("topright", legend=c('Least Squares', 'Least Absolute Deviation','50% Quantile'), col=c('green','blue','red'), lty=1)
+abline(LS, col="green", lwd=2) #Draw a line for Least Square Regression
+abline(LAD, col="blue", lwd=2) #Draw a line for LAD Regression
+abline(QRL, col="red", lwd=1) #Draw a line for 50% Quantile Regression
+
+plot(log.data, xlim=c(0.3,0.34), ylim=c(4.2,4.8), main = title, xlab=x.axis, ylab=y.axis1) #Zoomed in version to visualize regression lines
+legend("topright", legend=c('Least Squares', 'Least Absolute Deviation','50% Quantile'), col=c('green','blue','red'), lty=1)
+abline(LS, col="green", lwd=2)
+abline(LAD, col="blue", lwd=5)
+abline(QRL, col="red", lwd=2)  
+
+cor = cor(mean.log.data) #Find the correlation coefficients
+cor.rsq = append(cor, summary(LS)$r.squared) #A vector of the correlation coefficients and r squared value
+
+LS 
+LAD 
+QRL 
+cor.rsq 
+```
+
+### We will proceed further and check the conditions required for linear regression. Such conditions include Linearity, Normality of the residuals and Constant Variability.
+
+```{r}
+title3 = "Residuals of log(Gain)"
+LAD.Residual.gain = log.data['log.data.gain.'] - rep(predict(LAD), each=10) #Calculate for the LAD gain
+QRL.Residual.gain = log.data['log.data.gain.'] - rep(predict(QRL), each=10) #Calculate for the QRL gain
+
+LAD.Residual = data.frame(log.data['data.density'], LAD.Residual.gain)
+QRL.Residual = data.frame(log.data['data.density'], QRL.Residual.gain)
+
+plot(fit.log$residuals, main='Residual plot of the Least Squares Regression Line', ylab=y.axis1, col='green4') #Residual plot of Least Sqaures
+abline(0,0,col='red') #A fitted line to the residual plot
+plot(LAD.Residual$log.data.gain., main='Residual plot of LAD Line', ylab='Gain', col='blue2') #Residual plot of LAD
+abline(0,0,col='red') #A fitted line to the residual plot
+plot(QRL.Residual$log.data.gain., main='Residual plt of Quantile Regression Line', ylab='Gain', col='darkmagenta') #Residual plot of Quantile Regression
+abline(0,0,col='red') #A fitted line to the residual plot
+
+
+
+hist((fit.log$residuals),xlim=c(-0.2,0.3), col='coral3', xlab=y.axis, main='Histogram: Least Squares Regression Line', breaks=15) #Histogram of the least sqaures plot is normal
+qqnorm(fit.log$residuals, col='burlywood4') #qqplot of the Least Squares residual plot 
+qqline(fit.log$residuals, col='red1')
+
+hist(LAD.Residual$log.data.gain., xlim=c(-0.2,0.3), xlab='Gain', main='Histogram: LAD Regression Line', breaks=15, col='darkgoldenrod3') #Histogram of the LAD is normal
+qqnorm(LAD.Residual$log.data.gain., col='darkolivegreen') #qqplot of the LAD residual plot
+qqline(LAD.Residual$log.data.gain., col='red1')
+
+hist(QRL.Residual$log.data.gain., xlim=c(-0.2,0.3), xlab='Gain', main='Histogram: LAD Regression Line', breaks=15, col='darkblue') #Histogram of the LAD is normal
+qqnorm(QRL.Residual$log.data.gain., col='blueviolet') #qqplot of the QRL residual plot
+qqline(QRL.Residual$log.data.gain., col='red1')
+
+
+
+plot(fit.log$residuals, ylim=c(-.6,.6), main= 'Adjusted Residual plot of Least Squares Regression Line', ylab=y.axis1, col='green4') #Check for constant Variability with an adjusted plot for Least Squares
+abline(0,0,col='red')
+plot(LAD.Residual$log.data.gain., ylim=c(-.6,.6), main='Adjusted Residual plot of LAD Line', ylab='Gain', col='blue2') #Check for constant Variability with an adjusted plot for LAD
+abline(0,0,col='red') #A fitted line to the residual plot
+plot(QRL.Residual$log.data.gain., ylim=c(-.6,.6), main='Adjusted Residual plt of Quantile Regression Line', ylab='Gain', col='darkmagenta') #Check for constant Variability with an adjusted plot for Quantile Regression
+abline(0,0,col='red') #A fitted line to the residual plot
+```
+
+## Scenario 3: Cross Validation
+
+### To check how well your procecure works, omit the set of measurements corresponding to the block of density 0.508, apply your "estimation"/calibration procedure to the remaining data, and provide an interval estimate for the density of a block with an average reading of 38.6.
+### Where does the actual density fall in the interval? Try the same test, for the set of measurements at the 0.001 density.
+
+```{r}
+omit.log.data = log.data[-c(1:10),] #omit data
+omit.mean.log.data = mean.log.data[-1,] #omit data
+
+New.LS = lm(gain~density, omit.mean.log.data) #Find the Least Squares Regression Line for the new data
+avg.density = mean(omit.mean.log.data$density) #Find the mean of the density for the new data
+sigma = sum((omit.mean.log.data$density - avg.density)^2) 
+
+plot(omit.log.data, main='Scatter plot of the Density and Gain with omitted data', xlab=x.axis, ylab=y.axis1)
+abline(LS, col='red1')
+legend('topright', legend=c('Least Squares Regression Line'), col=c('red'), lwd=1)
+
+s2 = aggregate(list(var=LS.Residual$LS.Residual.gain), by=list(density=LS.Residual$data.density), FUN=var)
+s =sqrt(mean(s2$var))
+
+bounds = 10*s*sqrt((1/9-1) + [(density-avg.density)^2/sigma)]
+
+PredictLogGain <- function(density)
+predict(LS, data.frame(density=density)) 
+ 
+```
