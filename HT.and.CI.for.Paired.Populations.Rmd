@@ -1,0 +1,44 @@
+---
+title: "HT and CI for Paired Populations"
+output: html_notebook
+---
+##### Do the older man and younger man in gay couples have similar levels of attractiveness (as judged by a committee of raters)? Load the couples.csv file. This contains the attractiveness scores for the older and younger men in 1000 gay couples (each score is the average of 15 "attractiveness raters", where 0 is less attractive and 10 is more attractive). Note: The meaning of "attractiveness" is complex and varies from person to person, which is one reason psychology researchers might use the avg rating from some fixed committee of people. In this way, you don't need to ever define "attractiveness", it is just the avg of all the individual definitions of the people on your commitee (whatever that means!). Read in the data set and conduct a hypothesis test with $\alpha=0.04$ to answer this question. Afterward, make a CI that has duality with this particular hypothesis test. You should use R commands to do these tasks (you can check the R commands using pencil and paper approaches if you wish). Include your code and important findings.
+
+
+##### Part A: Conduct a hypothesis test with $\alpha=0.04$.
+```{r}
+data = read.csv('couples.csv', head=T) #load the dataset
+
+a = 0.04 #significance level
+n = 1000 #sample size
+u_o = mean(data$olderman) #mean of the attractiveness of the olderman
+u_y = mean(data$youngerman) #mean of the attractiveness of the youngerman
+s_o = sd(data$olderman) #sd of the attractiveness of the olderman
+s_y = sd(data$youngerman) #sd of the attractiveness of the youngerman
+
+z = (u_o - u_y) / sqrt((s_o/n)+(s_y/n)) #calculate for the z-value
+p = pnorm(z, lower=T) #calcuate of the p-value
+print(p)
+p < a #Check if p-value if less than a = 0.04
+```
+Since we have that p < a is true, we reject the null hypothesis, which means that older man and younger man in gay couples do not have similar levels of attractiveness!
+
+
+
+##### Part B: Make a CI that has duality.
+
+Recall that the formula for a CI is the following:
+CI:$(\bar X - z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}},\bar X + z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}})$
+```{r}
+xbar = u_y - u_o #calculate for xbar, which is the difference between the two means
+z_atwo = qnorm(0.02, lower=F) #value for z_alpha/2
+s_d = sqrt((s_o/n)+(s_y/n)) #sd of the differences
+
+lb = xbar - z_atwo*s_d
+ub = xbar + z_atwo*s_d
+cat('The CI is :','(',lb,ub,')')
+
+```
+
+
+
