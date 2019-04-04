@@ -16,10 +16,15 @@ u_y = mean(data$youngerman) #mean of the attractiveness of the youngerman
 s_o = sd(data$olderman) #sd of the attractiveness of the olderman
 s_y = sd(data$youngerman) #sd of the attractiveness of the youngerman
 
-z = (u_o - u_y) / sqrt((s_o/n)+(s_y/n)) #calculate for the z-value
-p = pnorm(z, lower=T) #calcuate of the p-value
+df = n - 2
+sp2 = ((n-1)*s_o^2+(n-1)*s_y^2)/(n+n-2) #calculate for sp^2
+sp = sqrt(sp2) #don't forget to take the sqrt of sp^2
+t = (u_o - u_y) / (sp*((1/n)+(1/n))) #calculate for the t-value
+p = 2*pt(t, df=df, lower=T) #calcuate of the p-value
+
 print(p)
 p < a #Check if p-value if less than a = 0.04
+cat('The p-value is', p, 'so p < a is', p < a, 'hence we reject the null hypothesis!')
 ```
 Since we have that p < a is true, we reject the null hypothesis, which means that older man and younger man in gay couples do not have similar levels of attractiveness!
 
@@ -28,14 +33,14 @@ Since we have that p < a is true, we reject the null hypothesis, which means tha
 ##### Part B: Make a CI that has duality.
 
 Recall that the formula for a CI is the following:
-CI:$(\bar X - z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}},\bar X + z_{\frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}})$
+CI:$(\bar X - t_{\frac{\alpha}{2},n+m-2}s_p\sqrt{\frac{1}{n}+\frac{1}{m}},\bar X + t_{\frac{\alpha}{2},n+m-2}s_p\sqrt{\frac{1}{n}+\frac{1}{m}}$
 ```{r}
 xbar = u_y - u_o #calculate for xbar, which is the difference between the two means
-z_atwo = qnorm(0.02, lower=F) #value for z_alpha/2
-s_d = sqrt((s_o/n)+(s_y/n)) #sd of the differences
+t_a2 = qt(0.02, df=df, lower=F) #value for t_alpha/2
+nm = sqrt((1/n)+(1/n)) #sd of the differences
 
-lb = xbar - z_atwo*s_d
-ub = xbar + z_atwo*s_d
+lb = xbar - t_a2*sp*nm
+ub = xbar + t_a2*sp*nm
 cat('The CI is :','(',lb,ub,')')
 
 ```
