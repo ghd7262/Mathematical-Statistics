@@ -6,6 +6,9 @@ output: html_notebook
 
 
 ##### Part A: Conduct a hypothesis test with $\alpha=0.04$.
+
+Note the formula for t is the following:
+$T=\frac{\bar D-0}{{s_d}/{\sqrt n}}$
 ```{r}
 data = read.csv('couples.csv', head=T) #load the dataset
 
@@ -15,12 +18,13 @@ u_o = mean(data$olderman) #mean of the attractiveness of the olderman
 u_y = mean(data$youngerman) #mean of the attractiveness of the youngerman
 s_o = sd(data$olderman) #sd of the attractiveness of the olderman
 s_y = sd(data$youngerman) #sd of the attractiveness of the youngerman
+s_d = s_y - s_o
 
 df = n - 2
-sp2 = ((n-1)*s_o^2+(n-1)*s_y^2)/(n+n-2) #calculate for sp^2
-sp = sqrt(sp2) #don't forget to take the sqrt of sp^2
-t = (u_o - u_y) / (sp*((1/n)+(1/n))) #calculate for the t-value
-p = 2*pt(t, df=df, lower=T) #calcuate of the p-value
+#sp2 = ((n-1)*s_o^2+(n-1)*s_y^2)/(n+n-2) #calculate for sp^2
+#sp = sqxrt(sp2) #don't forget to take the sqrt of sp^2
+t = (u_y - u_o) / (s_d/sqrt(n)) #calculate for the t-value
+p = 2*pt(t, df=df, lower=F) #calcuate of the p-value
 
 print(p)
 p < a #Check if p-value if less than a = 0.04
@@ -33,16 +37,20 @@ Since we have that p < a is true, we reject the null hypothesis, which means tha
 ##### Part B: Make a CI that has duality.
 
 Recall that the formula for a CI is the following:
-CI:$(\bar X - t_{\frac{\alpha}{2},n+m-2}s_p\sqrt{\frac{1}{n}+\frac{1}{m}},\bar X + t_{\frac{\alpha}{2},n+m-2}s_p\sqrt{\frac{1}{n}+\frac{1}{m}}$
+CI:$(\bar D - t_{\frac{\alpha}{2},n+m-2}\frac{s_d}{\sqrt{n}},\bar D + t_{\frac{\alpha}{2},n+m-2}\frac{s_d}{\sqrt{n}})$
 ```{r}
-xbar = u_y - u_o #calculate for xbar, which is the difference between the two means
+dbar = u_y - u_o #calculate for xbar, which is the difference between the two means
 t_a2 = qt(0.02, df=df, lower=F) #value for t_alpha/2
-nm = sqrt((1/n)+(1/n)) #sd of the differences
 
-lb = xbar - t_a2*sp*nm
-ub = xbar + t_a2*sp*nm
+lb = dbar - t_a2*(s_d/sqrt(n))
+ub = dbar + t_a2*(s_d/sqrt(n))
 cat('The CI is :','(',lb,ub,')')
 
+```
+We can check our answer using the 't-test function
+```{r}
+diff = data$younger - data$olderman
+t.test(diff, conf.level = 1-a)
 ```
 
 

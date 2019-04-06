@@ -244,9 +244,10 @@ $(document).ready(function () {
 </div>
 <div id="part-a-conduct-a-hypothesis-test-with-alpha0.04." class="section level5">
 <h5>Part A: Conduct a hypothesis test with <span class="math inline">\(\alpha=0.04\)</span>.</h5>
+<p>Note the formula for t is the following: <span class="math inline">\(T=\frac{\bar D-0}{{s_d}/{\sqrt n}}\)</span></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YSA9IHJlYWQuY3N2KCdjb3VwbGVzLmNzdicsIGhlYWQ9VCkgI2xvYWQgdGhlIGRhdGFzZXRcbmEgPSAwLjA0ICNzaWduaWZpY2FuY2UgbGV2ZWxcbm4gPSAxMDAwICNzYW1wbGUgc2l6ZVxudV9vID0gbWVhbihkYXRhJG9sZGVybWFuKSAjbWVhbiBvZiB0aGUgYXR0cmFjdGl2ZW5lc3Mgb2YgdGhlIG9sZGVybWFuXG51X3kgPSBtZWFuKGRhdGEkeW91bmdlcm1hbikgI21lYW4gb2YgdGhlIGF0dHJhY3RpdmVuZXNzIG9mIHRoZSB5b3VuZ2VybWFuXG5zX28gPSBzZChkYXRhJG9sZGVybWFuKSAjc2Qgb2YgdGhlIGF0dHJhY3RpdmVuZXNzIG9mIHRoZSBvbGRlcm1hblxuc195ID0gc2QoZGF0YSR5b3VuZ2VybWFuKSAjc2Qgb2YgdGhlIGF0dHJhY3RpdmVuZXNzIG9mIHRoZSB5b3VuZ2VybWFuXG5kZiA9IG4gLTJcbnNwMiA9ICgobi0xKSpzX29eMisobi0xKSpzX3leMikvKG4rbi0yKSAjY2FsY3VsYXRlIGZvciBzcF4yXG5zcCA9IHNxcnQoc3AyKSAjZG9uJ3QgZm9yZ2V0IHRvIHRha2UgdGhlIHNxcnQgb2Ygc3BeMlxudCA9ICh1X28gLSB1X3kpIC8gKHNwKigoMS9uKSsoMS9uKSkpICNjYWxjdWxhdGUgZm9yIHRoZSB0LXZhbHVlXG5wID0gMipwdCh0LCBkZj1kZiwgbG93ZXI9VCkgI2NhbGN1YXRlIG9mIHRoZSBwLXZhbHVlXG5wcmludChwKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YSA9IHJlYWQuY3N2KCdjb3VwbGVzLmNzdicsIGhlYWQ9VCkgI2xvYWQgdGhlIGRhdGFzZXRcbmEgPSAwLjA0ICNzaWduaWZpY2FuY2UgbGV2ZWxcbm4gPSAxMDAwICNzYW1wbGUgc2l6ZVxudV9vID0gbWVhbihkYXRhJG9sZGVybWFuKSAjbWVhbiBvZiB0aGUgYXR0cmFjdGl2ZW5lc3Mgb2YgdGhlIG9sZGVybWFuXG51X3kgPSBtZWFuKGRhdGEkeW91bmdlcm1hbikgI21lYW4gb2YgdGhlIGF0dHJhY3RpdmVuZXNzIG9mIHRoZSB5b3VuZ2VybWFuXG5zX28gPSBzZChkYXRhJG9sZGVybWFuKSAjc2Qgb2YgdGhlIGF0dHJhY3RpdmVuZXNzIG9mIHRoZSBvbGRlcm1hblxuc195ID0gc2QoZGF0YSR5b3VuZ2VybWFuKSAjc2Qgb2YgdGhlIGF0dHJhY3RpdmVuZXNzIG9mIHRoZSB5b3VuZ2VybWFuXG5zX2QgPSBzX3kgLSBzX29cbmRmID0gbiAtIDJcbiNzcDIgPSAoKG4tMSkqc19vXjIrKG4tMSkqc195XjIpLyhuK24tMikgI2NhbGN1bGF0ZSBmb3Igc3BeMlxuI3NwID0gc3F4cnQoc3AyKSAjZG9uJ3QgZm9yZ2V0IHRvIHRha2UgdGhlIHNxcnQgb2Ygc3BeMlxudCA9ICh1X3kgLSB1X28pIC8gKHNfZC9zcXJ0KG4pKSAjY2FsY3VsYXRlIGZvciB0aGUgdC12YWx1ZVxucCA9IDIqcHQodCwgZGY9ZGYsIGxvd2VyPUYpICNjYWxjdWF0ZSBvZiB0aGUgcC12YWx1ZVxucHJpbnQocClcbmBgYCJ9 -->
 <pre class="r"><code>data = read.csv('couples.csv', head=T) #load the dataset
 a = 0.04 #significance level
 n = 1000 #sample size
@@ -254,15 +255,16 @@ u_o = mean(data$olderman) #mean of the attractiveness of the olderman
 u_y = mean(data$youngerman) #mean of the attractiveness of the youngerman
 s_o = sd(data$olderman) #sd of the attractiveness of the olderman
 s_y = sd(data$youngerman) #sd of the attractiveness of the youngerman
-df = n -2
-sp2 = ((n-1)*s_o^2+(n-1)*s_y^2)/(n+n-2) #calculate for sp^2
-sp = sqrt(sp2) #don't forget to take the sqrt of sp^2
-t = (u_o - u_y) / (sp*((1/n)+(1/n))) #calculate for the t-value
-p = 2*pt(t, df=df, lower=T) #calcuate of the p-value
+s_d = s_y - s_o
+df = n - 2
+#sp2 = ((n-1)*s_o^2+(n-1)*s_y^2)/(n+n-2) #calculate for sp^2
+#sp = sqxrt(sp2) #don't forget to take the sqrt of sp^2
+t = (u_y - u_o) / (s_d/sqrt(n)) #calculate for the t-value
+p = 2*pt(t, df=df, lower=F) #calcuate of the p-value
 print(p)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIuMDg2MjExZS0yODlcbiJ9 -->
-<pre><code>[1] 2.086211e-289</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDBcbiJ9 -->
+<pre><code>[1] 0</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucCA8IGEgI0NoZWNrIGlmIHAtdmFsdWUgaWYgbGVzcyB0aGFuIGEgPSAwLjA0XG5gYGAifQ== -->
 <pre class="r"><code>p &lt; a #Check if p-value if less than a = 0.04</code></pre>
@@ -273,8 +275,8 @@ print(p)</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2F0KCdUaGUgcC12YWx1ZSBpcycsIHAsICdzbyBwIDwgYSBpcycsIHAgPCBhLCAnaGVuY2Ugd2UgcmVqZWN0IHRoZSBudWxsIGh5cG90aGVzaXMhJylcbmBgYCJ9 -->
 <pre class="r"><code>cat('The p-value is', p, 'so p &lt; a is', p &lt; a, 'hence we reject the null hypothesis!')</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiVGhlIHAtdmFsdWUgaXMgMi4wODYyMTFlLTI4OSBzbyBwIDwgYSBpcyBUUlVFIGhlbmNlIHdlIHJlamVjdCB0aGUgbnVsbCBoeXBvdGhlc2lzIVxuIn0= -->
-<pre><code>The p-value is 2.086211e-289 so p &lt; a is TRUE hence we reject the null hypothesis!</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiVGhlIHAtdmFsdWUgaXMgMCBzbyBwIDwgYSBpcyBUUlVFIGhlbmNlIHdlIHJlamVjdCB0aGUgbnVsbCBoeXBvdGhlc2lzIVxuIn0= -->
+<pre><code>The p-value is 0 so p &lt; a is TRUE hence we reject the null hypothesis!</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -282,26 +284,47 @@ print(p)</code></pre>
 </div>
 <div id="part-b-make-a-ci-that-has-duality." class="section level5">
 <h5>Part B: Make a CI that has duality.</h5>
-<p>Recall that the formula for a CI is the following: CI:<span class="math inline">\((\bar X - t_{\frac{\alpha}{2},n+m-2}s_p\sqrt{\frac{1}{n}+\frac{1}{m}},\bar X + t_{\frac{\alpha}{2},n+m-2}s_p\sqrt{\frac{1}{n}+\frac{1}{m}}\)</span></p>
+<p>Recall that the formula for a CI is the following: CI:<span class="math inline">\((\bar D - t_{\frac{\alpha}{2},n+m-2}\frac{s_d}{\sqrt{n}},\bar D + t_{\frac{\alpha}{2},n+m-2}\frac{s_d}{\sqrt{n}})\)</span></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueGJhciA9IHVfeSAtIHVfbyAjY2FsY3VsYXRlIGZvciB4YmFyLCB3aGljaCBpcyB0aGUgZGlmZmVyZW5jZSBiZXR3ZWVuIHRoZSB0d28gbWVhbnNcbnRfYTIgPSBxdCgwLjAyLCBkZj1kZiwgbG93ZXI9RikgI3ZhbHVlIGZvciB0X2FscGhhLzJcbm5tID0gc3FydCgoMS9uKSsoMS9uKSkgI3NkIG9mIHRoZSBkaWZmZXJlbmNlc1xubGIgPSB4YmFyIC0gdF9hMipzcCpubVxudWIgPSB4YmFyICsgdF9hMipzcCpubVxuY2F0KCdUaGUgQ0kgaXMgOicsJygnLGxiLHViLCcpJylcbmBgYCJ9 -->
-<pre class="r"><code>xbar = u_y - u_o #calculate for xbar, which is the difference between the two means
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGJhciA9IHVfeSAtIHVfbyAjY2FsY3VsYXRlIGZvciB4YmFyLCB3aGljaCBpcyB0aGUgZGlmZmVyZW5jZSBiZXR3ZWVuIHRoZSB0d28gbWVhbnNcbnRfYTIgPSBxdCgwLjAyLCBkZj1kZiwgbG93ZXI9RikgI3ZhbHVlIGZvciB0X2FscGhhLzJcbmxiID0gZGJhciAtIHRfYTIqKHNfZC9zcXJ0KG4pKVxudWIgPSBkYmFyICsgdF9hMiooc19kL3NxcnQobikpXG5jYXQoJ1RoZSBDSSBpcyA6JywnKCcsbGIsdWIsJyknKVxuYGBgIn0= -->
+<pre class="r"><code>dbar = u_y - u_o #calculate for xbar, which is the difference between the two means
 t_a2 = qt(0.02, df=df, lower=F) #value for t_alpha/2
-nm = sqrt((1/n)+(1/n)) #sd of the differences
-lb = xbar - t_a2*sp*nm
-ub = xbar + t_a2*sp*nm
+lb = dbar - t_a2*(s_d/sqrt(n))
+ub = dbar + t_a2*(s_d/sqrt(n))
 cat('The CI is :','(',lb,ub,')')</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiVGhlIENJIGlzIDogKCAwLjAxNTQ3NDMxIDAuMjMzNjk1OSApXG4ifQ== -->
-<pre><code>The CI is : ( 0.01547431 0.2336959 )</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiVGhlIENJIGlzIDogKCAwLjEyMTIwNTMgMC4xMjc5NjQ5IClcbiJ9 -->
+<pre><code>The CI is : ( 0.1212053 0.1279649 )</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>We can check our answer using the ’t-test function</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGlmZiA9IGRhdGEkeW91bmdlciAtIGRhdGEkb2xkZXJtYW5cbnQudGVzdChkaWZmLCBjb25mLmxldmVsID0gMS1hKVxuYGBgIn0= -->
+<pre class="r"><code>diff = data$younger - data$olderman
+t.test(diff, conf.level = 1-a)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdE9uZSBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBkaWZmXG50ID0gNC44OCwgZGYgPSA5OTksIHAtdmFsdWUgPSAxLjIzNGUtMDZcbmFsdGVybmF0aXZlIGh5cG90aGVzaXM6IHRydWUgbWVhbiBpcyBub3QgZXF1YWwgdG8gMFxuOTYgcGVyY2VudCBjb25maWRlbmNlIGludGVydmFsOlxuIDAuMDcyMDg0NzEgMC4xNzcwODU0OFxuc2FtcGxlIGVzdGltYXRlczpcbm1lYW4gb2YgeCBcbjAuMTI0NTg1MSBcbiJ9 -->
+<pre><code>
+    One Sample t-test
+
+data:  diff
+t = 4.88, df = 999, p-value = 1.234e-06
+alternative hypothesis: true mean is not equal to 0
+96 percent confidence interval:
+ 0.07208471 0.17708548
+sample estimates:
+mean of x 
+0.1245851 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiSFQgYW5kIENJIGZvciBQYWlyZWQgUG9wdWxhdGlvbnMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KIyMjIyMgRG8gdGhlIG9sZGVyIG1hbiBhbmQgeW91bmdlciBtYW4gaW4gZ2F5IGNvdXBsZXMgaGF2ZSBzaW1pbGFyIGxldmVscyBvZiBhdHRyYWN0aXZlbmVzcyAoYXMganVkZ2VkIGJ5IGEgY29tbWl0dGVlIG9mIHJhdGVycyk/IExvYWQgdGhlIGNvdXBsZXMuY3N2IGZpbGUuIFRoaXMgY29udGFpbnMgdGhlIGF0dHJhY3RpdmVuZXNzIHNjb3JlcyBmb3IgdGhlIG9sZGVyIGFuZCB5b3VuZ2VyIG1lbiBpbiAxMDAwIGdheSBjb3VwbGVzIChlYWNoIHNjb3JlIGlzIHRoZSBhdmVyYWdlIG9mIDE1ICJhdHRyYWN0aXZlbmVzcyByYXRlcnMiLCB3aGVyZSAwIGlzIGxlc3MgYXR0cmFjdGl2ZSBhbmQgMTAgaXMgbW9yZSBhdHRyYWN0aXZlKS4gTm90ZTogVGhlIG1lYW5pbmcgb2YgImF0dHJhY3RpdmVuZXNzIiBpcyBjb21wbGV4IGFuZCB2YXJpZXMgZnJvbSBwZXJzb24gdG8gcGVyc29uLCB3aGljaCBpcyBvbmUgcmVhc29uIHBzeWNob2xvZ3kgcmVzZWFyY2hlcnMgbWlnaHQgdXNlIHRoZSBhdmcgcmF0aW5nIGZyb20gc29tZSBmaXhlZCBjb21taXR0ZWUgb2YgcGVvcGxlLiBJbiB0aGlzIHdheSwgeW91IGRvbid0IG5lZWQgdG8gZXZlciBkZWZpbmUgImF0dHJhY3RpdmVuZXNzIiwgaXQgaXMganVzdCB0aGUgYXZnIG9mIGFsbCB0aGUgaW5kaXZpZHVhbCBkZWZpbml0aW9ucyBvZiB0aGUgcGVvcGxlIG9uIHlvdXIgY29tbWl0ZWUgKHdoYXRldmVyIHRoYXQgbWVhbnMhKS4gUmVhZCBpbiB0aGUgZGF0YSBzZXQgYW5kIGNvbmR1Y3QgYSBoeXBvdGhlc2lzIHRlc3Qgd2l0aCAkXGFscGhhPTAuMDQkIHRvIGFuc3dlciB0aGlzIHF1ZXN0aW9uLiBBZnRlcndhcmQsIG1ha2UgYSBDSSB0aGF0IGhhcyBkdWFsaXR5IHdpdGggdGhpcyBwYXJ0aWN1bGFyIGh5cG90aGVzaXMgdGVzdC4gWW91IHNob3VsZCB1c2UgUiBjb21tYW5kcyB0byBkbyB0aGVzZSB0YXNrcyAoeW91IGNhbiBjaGVjayB0aGUgUiBjb21tYW5kcyB1c2luZyBwZW5jaWwgYW5kIHBhcGVyIGFwcHJvYWNoZXMgaWYgeW91IHdpc2gpLiBJbmNsdWRlIHlvdXIgY29kZSBhbmQgaW1wb3J0YW50IGZpbmRpbmdzLgoKCiMjIyMjIFBhcnQgQTogQ29uZHVjdCBhIGh5cG90aGVzaXMgdGVzdCB3aXRoICRcYWxwaGE9MC4wNCQuCmBgYHtyfQpkYXRhID0gcmVhZC5jc3YoJ2NvdXBsZXMuY3N2JywgaGVhZD1UKSAjbG9hZCB0aGUgZGF0YXNldAoKYSA9IDAuMDQgI3NpZ25pZmljYW5jZSBsZXZlbApuID0gMTAwMCAjc2FtcGxlIHNpemUKdV9vID0gbWVhbihkYXRhJG9sZGVybWFuKSAjbWVhbiBvZiB0aGUgYXR0cmFjdGl2ZW5lc3Mgb2YgdGhlIG9sZGVybWFuCnVfeSA9IG1lYW4oZGF0YSR5b3VuZ2VybWFuKSAjbWVhbiBvZiB0aGUgYXR0cmFjdGl2ZW5lc3Mgb2YgdGhlIHlvdW5nZXJtYW4Kc19vID0gc2QoZGF0YSRvbGRlcm1hbikgI3NkIG9mIHRoZSBhdHRyYWN0aXZlbmVzcyBvZiB0aGUgb2xkZXJtYW4Kc195ID0gc2QoZGF0YSR5b3VuZ2VybWFuKSAjc2Qgb2YgdGhlIGF0dHJhY3RpdmVuZXNzIG9mIHRoZSB5b3VuZ2VybWFuCgpkZiA9IG4gLSAyCnNwMiA9ICgobi0xKSpzX29eMisobi0xKSpzX3leMikvKG4rbi0yKSAjY2FsY3VsYXRlIGZvciBzcF4yCnNwID0gc3FydChzcDIpICNkb24ndCBmb3JnZXQgdG8gdGFrZSB0aGUgc3FydCBvZiBzcF4yCnQgPSAodV9vIC0gdV95KSAvIChzcCooKDEvbikrKDEvbikpKSAjY2FsY3VsYXRlIGZvciB0aGUgdC12YWx1ZQpwID0gMipwdCh0LCBkZj1kZiwgbG93ZXI9VCkgI2NhbGN1YXRlIG9mIHRoZSBwLXZhbHVlCgpwcmludChwKQpwIDwgYSAjQ2hlY2sgaWYgcC12YWx1ZSBpZiBsZXNzIHRoYW4gYSA9IDAuMDQKY2F0KCdUaGUgcC12YWx1ZSBpcycsIHAsICdzbyBwIDwgYSBpcycsIHAgPCBhLCAnaGVuY2Ugd2UgcmVqZWN0IHRoZSBudWxsIGh5cG90aGVzaXMhJykKYGBgClNpbmNlIHdlIGhhdmUgdGhhdCBwIDwgYSBpcyB0cnVlLCB3ZSByZWplY3QgdGhlIG51bGwgaHlwb3RoZXNpcywgd2hpY2ggbWVhbnMgdGhhdCBvbGRlciBtYW4gYW5kIHlvdW5nZXIgbWFuIGluIGdheSBjb3VwbGVzIGRvIG5vdCBoYXZlIHNpbWlsYXIgbGV2ZWxzIG9mIGF0dHJhY3RpdmVuZXNzIQoKCgojIyMjIyBQYXJ0IEI6IE1ha2UgYSBDSSB0aGF0IGhhcyBkdWFsaXR5LgoKUmVjYWxsIHRoYXQgdGhlIGZvcm11bGEgZm9yIGEgQ0kgaXMgdGhlIGZvbGxvd2luZzoKQ0k6JChcYmFyIFggLSB0X3tcZnJhY3tcYWxwaGF9ezJ9LG4rbS0yfXNfcFxzcXJ0e1xmcmFjezF9e259K1xmcmFjezF9e219fSxcYmFyIFggKyB0X3tcZnJhY3tcYWxwaGF9ezJ9LG4rbS0yfXNfcFxzcXJ0e1xmcmFjezF9e259K1xmcmFjezF9e219fSQKYGBge3J9CnhiYXIgPSB1X3kgLSB1X28gI2NhbGN1bGF0ZSBmb3IgeGJhciwgd2hpY2ggaXMgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiB0aGUgdHdvIG1lYW5zCnRfYTIgPSBxdCgwLjAyLCBkZj1kZiwgbG93ZXI9RikgI3ZhbHVlIGZvciB0X2FscGhhLzIKbm0gPSBzcXJ0KCgxL24pKygxL24pKSAjc2Qgb2YgdGhlIGRpZmZlcmVuY2VzCgpsYiA9IHhiYXIgLSB0X2EyKnNwKm5tCnViID0geGJhciArIHRfYTIqc3Aqbm0KY2F0KCdUaGUgQ0kgaXMgOicsJygnLGxiLHViLCcpJykKCmBgYAoKCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiSFQgYW5kIENJIGZvciBQYWlyZWQgUG9wdWxhdGlvbnMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KIyMjIyMgRG8gdGhlIG9sZGVyIG1hbiBhbmQgeW91bmdlciBtYW4gaW4gZ2F5IGNvdXBsZXMgaGF2ZSBzaW1pbGFyIGxldmVscyBvZiBhdHRyYWN0aXZlbmVzcyAoYXMganVkZ2VkIGJ5IGEgY29tbWl0dGVlIG9mIHJhdGVycyk/IExvYWQgdGhlIGNvdXBsZXMuY3N2IGZpbGUuIFRoaXMgY29udGFpbnMgdGhlIGF0dHJhY3RpdmVuZXNzIHNjb3JlcyBmb3IgdGhlIG9sZGVyIGFuZCB5b3VuZ2VyIG1lbiBpbiAxMDAwIGdheSBjb3VwbGVzIChlYWNoIHNjb3JlIGlzIHRoZSBhdmVyYWdlIG9mIDE1ICJhdHRyYWN0aXZlbmVzcyByYXRlcnMiLCB3aGVyZSAwIGlzIGxlc3MgYXR0cmFjdGl2ZSBhbmQgMTAgaXMgbW9yZSBhdHRyYWN0aXZlKS4gTm90ZTogVGhlIG1lYW5pbmcgb2YgImF0dHJhY3RpdmVuZXNzIiBpcyBjb21wbGV4IGFuZCB2YXJpZXMgZnJvbSBwZXJzb24gdG8gcGVyc29uLCB3aGljaCBpcyBvbmUgcmVhc29uIHBzeWNob2xvZ3kgcmVzZWFyY2hlcnMgbWlnaHQgdXNlIHRoZSBhdmcgcmF0aW5nIGZyb20gc29tZSBmaXhlZCBjb21taXR0ZWUgb2YgcGVvcGxlLiBJbiB0aGlzIHdheSwgeW91IGRvbid0IG5lZWQgdG8gZXZlciBkZWZpbmUgImF0dHJhY3RpdmVuZXNzIiwgaXQgaXMganVzdCB0aGUgYXZnIG9mIGFsbCB0aGUgaW5kaXZpZHVhbCBkZWZpbml0aW9ucyBvZiB0aGUgcGVvcGxlIG9uIHlvdXIgY29tbWl0ZWUgKHdoYXRldmVyIHRoYXQgbWVhbnMhKS4gUmVhZCBpbiB0aGUgZGF0YSBzZXQgYW5kIGNvbmR1Y3QgYSBoeXBvdGhlc2lzIHRlc3Qgd2l0aCAkXGFscGhhPTAuMDQkIHRvIGFuc3dlciB0aGlzIHF1ZXN0aW9uLiBBZnRlcndhcmQsIG1ha2UgYSBDSSB0aGF0IGhhcyBkdWFsaXR5IHdpdGggdGhpcyBwYXJ0aWN1bGFyIGh5cG90aGVzaXMgdGVzdC4gWW91IHNob3VsZCB1c2UgUiBjb21tYW5kcyB0byBkbyB0aGVzZSB0YXNrcyAoeW91IGNhbiBjaGVjayB0aGUgUiBjb21tYW5kcyB1c2luZyBwZW5jaWwgYW5kIHBhcGVyIGFwcHJvYWNoZXMgaWYgeW91IHdpc2gpLiBJbmNsdWRlIHlvdXIgY29kZSBhbmQgaW1wb3J0YW50IGZpbmRpbmdzLgoKCiMjIyMjIFBhcnQgQTogQ29uZHVjdCBhIGh5cG90aGVzaXMgdGVzdCB3aXRoICRcYWxwaGE9MC4wNCQuCgpOb3RlIHRoZSBmb3JtdWxhIGZvciB0IGlzIHRoZSBmb2xsb3dpbmc6CiRUPVxmcmFje1xiYXIgRC0wfXt7c19kfS97XHNxcnQgbn19JApgYGB7cn0KZGF0YSA9IHJlYWQuY3N2KCdjb3VwbGVzLmNzdicsIGhlYWQ9VCkgI2xvYWQgdGhlIGRhdGFzZXQKCmEgPSAwLjA0ICNzaWduaWZpY2FuY2UgbGV2ZWwKbiA9IDEwMDAgI3NhbXBsZSBzaXplCnVfbyA9IG1lYW4oZGF0YSRvbGRlcm1hbikgI21lYW4gb2YgdGhlIGF0dHJhY3RpdmVuZXNzIG9mIHRoZSBvbGRlcm1hbgp1X3kgPSBtZWFuKGRhdGEkeW91bmdlcm1hbikgI21lYW4gb2YgdGhlIGF0dHJhY3RpdmVuZXNzIG9mIHRoZSB5b3VuZ2VybWFuCnNfbyA9IHNkKGRhdGEkb2xkZXJtYW4pICNzZCBvZiB0aGUgYXR0cmFjdGl2ZW5lc3Mgb2YgdGhlIG9sZGVybWFuCnNfeSA9IHNkKGRhdGEkeW91bmdlcm1hbikgI3NkIG9mIHRoZSBhdHRyYWN0aXZlbmVzcyBvZiB0aGUgeW91bmdlcm1hbgpzX2QgPSBzX3kgLSBzX28KCmRmID0gbiAtIDIKI3NwMiA9ICgobi0xKSpzX29eMisobi0xKSpzX3leMikvKG4rbi0yKSAjY2FsY3VsYXRlIGZvciBzcF4yCiNzcCA9IHNxeHJ0KHNwMikgI2Rvbid0IGZvcmdldCB0byB0YWtlIHRoZSBzcXJ0IG9mIHNwXjIKdCA9ICh1X3kgLSB1X28pIC8gKHNfZC9zcXJ0KG4pKSAjY2FsY3VsYXRlIGZvciB0aGUgdC12YWx1ZQpwID0gMipwdCh0LCBkZj1kZiwgbG93ZXI9RikgI2NhbGN1YXRlIG9mIHRoZSBwLXZhbHVlCgpwcmludChwKQpwIDwgYSAjQ2hlY2sgaWYgcC12YWx1ZSBpZiBsZXNzIHRoYW4gYSA9IDAuMDQKY2F0KCdUaGUgcC12YWx1ZSBpcycsIHAsICdzbyBwIDwgYSBpcycsIHAgPCBhLCAnaGVuY2Ugd2UgcmVqZWN0IHRoZSBudWxsIGh5cG90aGVzaXMhJykKYGBgClNpbmNlIHdlIGhhdmUgdGhhdCBwIDwgYSBpcyB0cnVlLCB3ZSByZWplY3QgdGhlIG51bGwgaHlwb3RoZXNpcywgd2hpY2ggbWVhbnMgdGhhdCBvbGRlciBtYW4gYW5kIHlvdW5nZXIgbWFuIGluIGdheSBjb3VwbGVzIGRvIG5vdCBoYXZlIHNpbWlsYXIgbGV2ZWxzIG9mIGF0dHJhY3RpdmVuZXNzIQoKCgojIyMjIyBQYXJ0IEI6IE1ha2UgYSBDSSB0aGF0IGhhcyBkdWFsaXR5LgoKUmVjYWxsIHRoYXQgdGhlIGZvcm11bGEgZm9yIGEgQ0kgaXMgdGhlIGZvbGxvd2luZzoKQ0k6JChcYmFyIEQgLSB0X3tcZnJhY3tcYWxwaGF9ezJ9LG4rbS0yfVxmcmFje3NfZH17XHNxcnR7bn19LFxiYXIgRCArIHRfe1xmcmFje1xhbHBoYX17Mn0sbittLTJ9XGZyYWN7c19kfXtcc3FydHtufX0pJApgYGB7cn0KZGJhciA9IHVfeSAtIHVfbyAjY2FsY3VsYXRlIGZvciB4YmFyLCB3aGljaCBpcyB0aGUgZGlmZmVyZW5jZSBiZXR3ZWVuIHRoZSB0d28gbWVhbnMKdF9hMiA9IHF0KDAuMDIsIGRmPWRmLCBsb3dlcj1GKSAjdmFsdWUgZm9yIHRfYWxwaGEvMgoKbGIgPSBkYmFyIC0gdF9hMiooc19kL3NxcnQobikpCnViID0gZGJhciArIHRfYTIqKHNfZC9zcXJ0KG4pKQpjYXQoJ1RoZSBDSSBpcyA6JywnKCcsbGIsdWIsJyknKQoKYGBgCldlIGNhbiBjaGVjayBvdXIgYW5zd2VyIHVzaW5nIHRoZSAndC10ZXN0IGZ1bmN0aW9uCmBgYHtyfQpkaWZmID0gZGF0YSR5b3VuZ2VyIC0gZGF0YSRvbGRlcm1hbgp0LnRlc3QoZGlmZiwgY29uZi5sZXZlbCA9IDEtYSkKYGBgCgoKCg==</div>
 
 
 
