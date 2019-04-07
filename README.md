@@ -1,2 +1,2 @@
 # R Notes
-## Mathematical Statistics
+## Mathematical Statistics Notes
