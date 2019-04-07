@@ -16,13 +16,9 @@ a = 0.04 #significance level
 n = 1000 #sample size
 u_o = mean(data$olderman) #mean of the attractiveness of the olderman
 u_y = mean(data$youngerman) #mean of the attractiveness of the youngerman
-s_o = sd(data$olderman) #sd of the attractiveness of the olderman
-s_y = sd(data$youngerman) #sd of the attractiveness of the youngerman
-s_d = s_y - s_o
+s_d = sd(data$youngerman - data$olderman) #sd of the differences, make sure to take the sd of the differences since the differences of sd will differ
 
-df = n - 2
-#sp2 = ((n-1)*s_o^2+(n-1)*s_y^2)/(n+n-2) #calculate for sp^2
-#sp = sqxrt(sp2) #don't forget to take the sqrt of sp^2
+df = n - 1
 t = (u_y - u_o) / (s_d/sqrt(n)) #calculate for the t-value
 p = 2*pt(t, df=df, lower=F) #calcuate of the p-value
 
@@ -47,7 +43,7 @@ ub = dbar + t_a2*(s_d/sqrt(n))
 cat('The CI is :','(',lb,ub,')')
 
 ```
-We can check our answer using the 't-test function
+##### We can check our answer using the 't-test function
 ```{r}
 diff = data$younger - data$olderman
 t.test(diff, conf.level = 1-a)
