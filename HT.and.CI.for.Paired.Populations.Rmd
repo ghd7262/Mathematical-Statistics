@@ -1,7 +1,4 @@
----
-title: "HT and CI for Paired Populations"
-output: html_notebook
----
+
 ##### Do the older man and younger man in gay couples have similar levels of attractiveness (as judged by a committee of raters)? Load the couples.csv file. This contains the attractiveness scores for the older and younger men in 1000 gay couples (each score is the average of 15 "attractiveness raters", where 0 is less attractive and 10 is more attractive). Note: The meaning of "attractiveness" is complex and varies from person to person, which is one reason psychology researchers might use the avg rating from some fixed committee of people. In this way, you don't need to ever define "attractiveness", it is just the avg of all the individual definitions of the people on your commitee (whatever that means!). Read in the data set and conduct a hypothesis test with $\alpha=0.04$ to answer this question. Afterward, make a CI that has duality with this particular hypothesis test. You should use R commands to do these tasks (you can check the R commands using pencil and paper approaches if you wish). Include your code and important findings.
 
 
