@@ -1,7 +1,4 @@
----
-title: "How does R perform the t test?"
-output: html_notebook
----
+
 #### If you’re a curious person, you may have wondered how R actually does some of its calculations. The sad reality is that most people use R functions like t.test as a black box: they have no idea what is actually happening under the hood and just hit buttons on their computers. Let’s be curious.
 
 #### At the prompt in R, type stats:::t.test.default
