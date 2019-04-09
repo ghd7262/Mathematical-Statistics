@@ -1,0 +1,18 @@
+---
+title: "How does R perform the t test?"
+output: html_notebook
+---
+#### If you’re a curious person, you may have wondered how R actually does some of its calculations. The sad reality is that most people use R functions like t.test as a black box: they have no idea what is actually happening under the hood and just hit buttons on their computers. Let’s be curious.
+
+#### At the prompt in R, type stats:::t.test.default
+
+#### Look through the code and find how R calculates the df value for our three cases: 1) paired data, 2) independent data with unknown and equal variances, and 3) independent data with unknown and unequal variances. Copy down the specific line(s) of code used in each case and then compare with what we learned in class. Explicitly show if they are the same or different from the in-class results. Finally, type ?t.test at the command prompt and note if the documentation (which is what 99% of people read, if they read anything) explains how it finds df or not.
+
+1. type 'stats:::t.test.default'
+2. Find how R calculates the df value for: i) paired data ii) independent data with unknown and equal variances iii) independent data with unknown and unequal variances
+```{r}
+stats:::t.test.default 
+?t.test #to find whether the R documentation explains how it finds the df or not
+```
+
+
