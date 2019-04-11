@@ -2,7 +2,7 @@
 title: GLRT
 output: html_notebook
 ---
-### Suppose you wanted to find the GLRT of C={X|n*log(sum|xi|-lambda0*sum|xi| < c)} with significance level alpha = 0.01. Your answer likely includes an expression whose pdf is unknown, and hence it is difficult to algebraically determine a critical value, c, that gives rise to a critical region with a prescribed alpha level. Use a trial-and-error process and simulation to find an approximate c which creates a GLRT with a approx 0.01. Use n = 5 and lambda0 = 2
+### Suppose you wanted to find the GLRT of C={X|n*log(sum|xi|-lambda0*sum|xi| < c)} with significance level alpha = 0.01. Your answer likely includes an expression whose pdf is unknown, and hence it is difficult to algebraically determine a critical value, c, that gives rise to a critical region with a prescribed alpha level. Use a trial-and-error process and simulation to find an approximate c which creates a GLRT with a approx 0.01. Use n = 5 and lambda0 = 2.
 
 
 ```{r}
