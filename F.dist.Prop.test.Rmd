@@ -1,0 +1,36 @@
+---
+title: "Mathematical Statistics"
+output: html_notebook
+---
+
+#### In the 2015 game Super Mario Maker, people from around the world are able to design their
+own Mario levels and upload them for the world to play. Over time, certain styles of levels grew
+in popularity and solidified as level types (e.g., speedrun levels, puzzle levels, automatic levels,
+music levels, costume levels, etc.). After seeing a level, you have the option to star it (to show
+your support for the creator) or not. You might say that a level is “likeable” if at least 20% of
+the people that played it (played column in data set) gave it a star (liked column). Using the
+data set SMMLevels, determine if the percentage of likeable puzzle levels is different than the
+percentage of likeable speedrun levels using a hypothesis test with α = 0.02. Begin your analysis
+by removing any level that was played by fewer than 10 people. Include your code and results.
+
+```{r}
+data = read.csv('SMMLevels.csv', head=T) #load the dataset
+puz = data[which(data$tag=='Puzzle' & data$played >=10),] #remove all the levels that was played by fewer than 10 people
+spd = data[which(data$tag=='Speedrun' & data$played >=10),] #sort out the data 
+lpuz = puz[which(puz$liked/puz$played>=0.2),] #sort out the likeable data
+lspd = spd[which(spd$liked/spd$played>=0.2),] 
+
+n = nrow(lpuz)
+m = nrow(lspd)
+p_x = nrow(puz)
+p_y = nrow(spd)
+
+prop.test(c(n,m),c(p_x,p_y), alternative = 'two.sided', correct = F)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
