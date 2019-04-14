@@ -1,0 +1,88 @@
+---
+title: "MATH 185 - Computational Statistics - Homework 1"
+author: Dukki Hong
+PID: A98058412
+Section: A04
+geometry: margin=2cm
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_notebook
+---
+## Problem 1
+
+We want to compute the power of the chi-squared test by simulation. Here is a simple setting. Suppose that the null distribution (denoted $P_0$) is the uniform distribution on $\{1,...,2k\}$, where $k\geq 1$ is an integer. We want to compute the power of the chi-squared test against $P_t$, which has same support, and defined as $P_t(j)=\frac{1}{2k} +t$ for $j\leq k$ and $P_t(j)=\frac{1}{2k} -t$ for $j\geq k+1$. We assume that $t\in(0,\frac{1}{2k})$.
+
+### Part A
+
+Write an $R$ function chisq.power$(k,t,n,B = 2000)$ that does the following. The function creates an empty binary vector $R$ of length $B$. For each $b = 1,...,B$, the function first simulateds $X_1^b,...,X_n^b$ iid from $P_t$ (with the specified $k$) and then sets $R_b = 1$ if the chi-squared test calibrated at the $5%$ level rejects, and $R_b=0$ otherwise. When the loop over $b$ ends, the function returns the proportion of entries in $R$ that are equal to $1$. (this estimates the power of the test. Can yous ee this?)
+
+```{r}
+chisq.power <- function(k,t,n,B = 2000){
+  R <- vector(mode='numeric', length = B)     #create an empty binary vector of length B
+  
+  null <- c(1:(2*k))                          #data under the null, uniformly distributed
+  
+  result <- c()                               #create a list
+  for (i in 1:(2*k)){                         #Generate data for Observed counts
+    j <- c(1:(2*k))
+  
+    if (j[i] <= k){
+      P_t <- 1/(2*j[i]) + t
+    }
+    else {
+      P_t <- 1/(2*j[i]) - t
+    }
+  
+    result <- c(result, P_t)
+  }
+  
+  sample(result, n, replace = T, prob = c(0.1, 0.4, 0.2, 0.3)) 
+  
+  for(i in 1:(2*k)){
+    if (chisq.test(null, result)$p-value <= 0.05){
+      replace(R, i, 1)
+    }
+  }
+}
+```
+
+
+### Part B
+
+## Problem 2
+
+Are the chance of a baby being born a girl the same across counties in California? Go
+to http://wonder.cdc.gov/natality.html. In Section 1, choose Gender and County. In Section
+2, choose the state to be California. In Section 4, choose the year 2017. Then click on \Send"
+anywhere. Enter the data in R. You can do so by hand or click on \Export", edit the resulting text
+le and then use the function read.table. (You will have to edit the TXT le in order to read it into
+R.) Save the dataset as an RDA le named natality-california-2017.rda. Do this as a preprocessing.
+Start your code by loading the dataset using the function load.
+
+Use these data to answer the question the best you can. Start by formalizing the question into a hypothesis testing problem, display relevant summary statistics and graphics, and then perform an appropriate test. Conclude with a sentence or two.
+
+```{r}
+data = read.table('natality-california-2017.rda')
+```
+
+
+## Problem 3
+
+Write a function *chisq.perm.test*(tab;B = 2000) implementing the chi-squared test of independence calibrated by permutation. The inputs are a table of joint counts (without totals) and number of permutations to be done. Have the test return the p-value. Test your function on the *HairEyeColor* dataset.
+
+## Problem 4
+
+Go to the following webpage: https://catalog.data.gov/dataset/school-improvement-2010-grants 
+Download the dataset. The description is on the webpage. To read it into R, use the function
+read.csv. Remove the schools from Rhode Island as their selected models are missing. Do this on your own to practice reading datasets into R. Save the dataset as an RDA le named school-improvement-2010.rda. Do this as a preprocessing. Start your code by loading the dataset using the function load.
+
+We are interested in the following question: Is there an association between the model that each school selected and the state where the school was located at that time?
+
+### Part A
+
+Explore this question with one or several appropriate plots. Then formulate the question into a hypothesis testing problem and perform a test. Conclude with some brief comments.
+
+### Part B
+
+In this particular case, is the method of Problem 3 applicable? If so, apply it and compare with the previous test that you performed.
+
+
