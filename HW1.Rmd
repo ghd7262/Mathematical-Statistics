@@ -21,7 +21,7 @@ chisq.power <- function(k,t,n,B = 2000){
   
   null <- c(1:(2*k))                          #data under the null, uniformly distributed
   
-  result <- c()                               #create a list
+  obs <- c()                               #create a list
   for (i in 1:(2*k)){                         #Generate data for Observed counts
     j <- c(1:(2*k))
   
@@ -32,15 +32,16 @@ chisq.power <- function(k,t,n,B = 2000){
       P_t <- 1/(2*j[i]) - t
     }
   
-    result <- c(result, P_t)
+    obs <- c(obs, P_t)
   }
   
-  sample(result, n, replace = T, prob = c(0.1, 0.4, 0.2, 0.3)) 
+  sim = sample(obs, n, replace = T, prob = rep(1/(2*k), times=(2*k))) 
   
   for(i in 1:(2*k)){
-    if (chisq.test(null, result)$p-value <= 0.05){
+    if (chisq.test(null, obs)$p.value <= 0.05){
       replace(R, i, 1)
     }
+    print(R)
   }
 }
 ```
@@ -61,7 +62,22 @@ Start your code by loading the dataset using the function load.
 Use these data to answer the question the best you can. Start by formalizing the question into a hypothesis testing problem, display relevant summary statistics and graphics, and then perform an appropriate test. Conclude with a sentence or two.
 
 ```{r}
-data = read.table('natality-california-2017.rda')
+mydata <- read.table("~/Desktop/UCSD MATH/Math.185/Natality, 2007-2017.txt", header = TRUE)
+save(mydata, file="~/Desktop/UCSD MATH/Math.185/natality-california-2017.rda")
+
+load("natality-california-2017.rda") 
+head(mydata)
+
+mydata = data.frame(mydata) #change mydata into a dataframe
+mydata = subset(mydata, select=c('Gender', 'County.Code','Births')) #remove unnecessary columns
+head(mydata) #note we are only left with 3 columns
+
+#Are the chance of a baby being born a girl the same across counties in California?
+#H_0: chance of baby being born a girl SAME across counties in CA
+#H_1: chance of baby being born a girl DIFFERENT across counties in CA
+
+
+
 ```
 
 
