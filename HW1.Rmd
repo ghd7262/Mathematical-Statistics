@@ -61,29 +61,121 @@ Start your code by loading the dataset using the function load.
 
 Use these data to answer the question the best you can. Start by formalizing the question into a hypothesis testing problem, display relevant summary statistics and graphics, and then perform an appropriate test. Conclude with a sentence or two.
 
+<font color=red>$H_0:(p_1,...,p_n)=(p_1^0,...,p_1^0)$, Chance of baby being born a girl SAME across counties in CA</font>
+
+<font color=red>$H_1:(p_1,...,p_n)\neq (p_1^0,...,p_1^0)$, Chance of baby being born a girl DIFFERENT across counties in CA</font>
 ```{r}
 mydata <- read.table("~/Desktop/UCSD MATH/Math.185/Natality, 2007-2017.txt", header = TRUE)
 save(mydata, file="~/Desktop/UCSD MATH/Math.185/natality-california-2017.rda")
 
 load("natality-california-2017.rda") 
-head(mydata)
 
 mydata = data.frame(mydata) #change mydata into a dataframe
 mydata = subset(mydata, select=c('Gender', 'County.Code','Births')) #remove unnecessary columns
-head(mydata) #note we are only left with 3 columns
 
 #Are the chance of a baby being born a girl the same across counties in California?
+#Parameter of interest: chance of baby being born a girl (p_i)
 #H_0: chance of baby being born a girl SAME across counties in CA
 #H_1: chance of baby being born a girl DIFFERENT across counties in CA
 
+mydata = mydata[order(mydata$County.Code),] #sort out 'County.Code' column in an increasing order
 
+female = mydata[seq(1,72,2),] #sort out mydata with females only
+male = mydata[seq(2,72,2),] #sort out mydata with males only
 
+f = matrix(female$Births, nrow = 1, ncol=36) #turn data into matrices
+m = matrix(male$Births, nrow = 1, ncol=36)
+
+X = rbind(f,m) #combine the two matrices into one matrix
+row.names(X) = c('Female','Male') #Label row names 
+  
+chisq.test(X)
+
+cat('value of X-Squared is', '41.285,', 'df is 35', 'and p-value is:', '0.215.')
+```
+
+<font color=red>At $\alpha =0.05$ level of significance, we have the p-value $p=0.215$ ($p=0.215 > 0.05 = \alpha$). Hence we keep the null hypothesis ($H_0$). This means that the chance of baby being born a girl is same across counties in California.</font>
+
+*Now we proceed to showing a graphical representation of the data*
+```{r}
+col = c('pink','skyblue') #set color
+ylab = ('Number of births') #Y-label name
+barplot(X, legend=T, col=col, ylab=ylab, ylim=c(0,120000)) 
+barplot(X, , beside= T, legend=T, col=col, ylab=ylab)
 ```
 
 
 ## Problem 3
 
 Write a function *chisq.perm.test*(tab;B = 2000) implementing the chi-squared test of independence calibrated by permutation. The inputs are a table of joint counts (without totals) and number of permutations to be done. Have the test return the p-value. Test your function on the *HairEyeColor* dataset.
+
+```{r}
+chisq.perm.test <- function(tab, B=2000){
+  obs = chisq.test(tab)$stat #observed statistic from the Chisqd test
+  
+  nrow = nrow(tab) #Number of rows
+  ncol = ncol(tab) #Number of columns
+  
+  rows = numeric(nrow) #create a 0 vector with n number of rows
+  totrow = numeric(0) #create a vector with 0's
+  
+  for (i in 1:nrow){ #for-loop to fill up the vectors defined above
+    rows[i] = sum(tab[i,]) #summing up each of the rows
+    totrow = c(totrow, rep.int(i, times=rows[i]))
+  }
+  
+  #do the same with the columns
+  cols = numeric(ncol) #empty vector with n columns
+  totcol = numeric(0) #0 vector
+  
+  for (i in 1:ncol){
+    cols[i] = sum(tab[,i]) #summing up each of the columns
+    totcol = c(totcol, rep.int(i, times=cols[i]))
+  }
+  
+  D = numeric(0) #vector for permutations for the Chisqd test statistic
+  tot = sum(tab[,]) #total number of counts
+  
+  #####################################
+  
+  for (b in 1:B){
+    x = totrow
+    y = sample(totcol, tot, replace=FALSE) #sample column totals 'tot' times without replacement
+    matperm = cbind(x,y) #combine columns of x and y
+    
+    matpermcount = matrix(0, nrow=nrow, ncol=ncol) #create a 0 matrix with n number of rows and columns
+    
+    for(x in 1:nrow){ #rows from 1 - 4
+      for(y in 1:ncol){ #rows from 1 - 4
+        for(m in 1:tot){ #loop for going through all the rows in matperm
+          if(all(matperm[m,] == c(x,y)) == TRUE){ #ordered pairs such as (1,1), (2,2) and etc...
+            matpermcount[x,y] = matpermcount[x,y] + 1
+          }
+        }
+      }
+    }
+  
+    D[b] = chisq.test(matpermcount)$stat #chisq.test statistic for a given permutation
+  
+    #Check if chisq.test stat >= observed stat
+    count = 0 #counts to check (chisq.test stat > observed)
+    if (D[b] >= obs){
+      count = count + 1
+    }
+    return((count+1)/(B+1))
+  }
+}
+```
+
+<font color=red>Now we check if the function works<font>
+```{r}
+tab = apply(HairEyeColor, c(1,2), sum)
+tab
+chisq.perm.test(tab)
+cat('We get that the Chi-squared test statistic is equal to :',chisq.perm.test(tab))
+```
+
+
 
 ## Problem 4
 
