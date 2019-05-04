@@ -1,0 +1,56 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+x <- c(360, 165, 21, 23, 11, 18, 18, 150, 45, 45, 18)
+y <- c(90, 105, 21, 26, 14, 28, 21, 105, 68, 75, 46)
+
+lnx <- log(x)
+lny <- log(y)
+
+lm1 <- lm(lny ~ lnx)
+lm2 <- lm(lnx ~ lny)
+
+summary(lm1)
+summary(lm2)
+
+plot(x, y, xlab = "days", ylab = "days")
+
+xcoord <- seq(min(x), max(x), length.out = 100)
+p1 <- predict(lm1, data.frame(lnx = log(xcoord)))
+lines(xcoord,exp(p1), col="red", lty = 2)
+  
+ycoord <- seq(min(y), max(y), length.out = 100)
+p2 <- predict(lm2, data.frame(lny = log(ycoord)))
+lines(exp(p2), ycoord, col='blue', lty = 2)
+
+legend("bottomright", c("Play ~ Locomotion", "Locomotion ~ Play"), lty=2, col= c("red","blue"))
+```
+
+```{r}
+x <- c(0:7)
+x <- x*4
+
+y <- c(300, 400, 400, 650, 700, 900, 1000, 1200)
+
+b <- cov(x,log(y)) / var(x)
+a <- exp(mean(log(y)) - b*mean(x))
+
+cat(a,b)
+
+lm <- lm(log(y) ~ x)
+summary(lm)
+
+a <- exp(coef(lm[1]))
+b <- coef(lm)[2]
+print(c(a,b))
+
+plot(x,y)
+xcoord <- seq(0,28, length.out = 100)
+ycoord <- a * exp(b*xcoord)
+lines(xcoord, ycoord)
+```
+
