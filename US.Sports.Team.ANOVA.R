@@ -1,8 +1,9 @@
 data <- read.csv('SportsAges.csv', head=T)
 
 n <- nrow(data)
-yddot <- sum(data$Age)
+k <- 4 - 1
 
+yddot <- sum(data$Age)
 
 NFL <- data[data$Sport == 'NFL',]
 NBA <- data[data$Sport == 'NBA',]
@@ -27,3 +28,9 @@ STR3 <- n_3*(ybardot3 - ybarddot)^2
 STR4 <- n_4*(ybardot4 - ybarddot)^2
 
 SSTR <- STR1 + STR2 + STR3 + STR4
+
+var <- var(data$Age)
+
+test.stat <- SSTR / var
+
+pchisq(test.stat, df = k)
