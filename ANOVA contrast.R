@@ -8,10 +8,9 @@ contrasts(data$country)
 boxplot(data$points ~ data$country)
 
 #ANOVA contrast
-country <- data$country
-contrasts(country) <- c(1/3, -1/2, 1/3, -1/2, 1/3)
-contrasts(country)
-results <- aov(data$points ~ country, data = data)
+new_country <- data$country
+contrasts(new_country) <- c(1/3, -1/2, 1/3, -1/2, 1/3)
+results <- aov(data$points ~ new_country, data = data)
 summary.lm(results)
 
 
