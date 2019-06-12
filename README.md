@@ -10,3 +10,4 @@
 #### Linear Models / Non-linear Models / Simple Linear Models / Cov and Corr / ANOVA / ANOVA Contrast / RBD / Non-parametric Testing / Wilcoxon test (Approx. and Exact)
 
 ### Fall 2019 (Sept - Dec)
+
