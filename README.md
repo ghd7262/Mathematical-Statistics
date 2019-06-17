@@ -9,6 +9,7 @@
 #### Paired pop HT CI / Independent Pop HT and CI / Inpden pop Var HT and CI / Multinomial / GOF / Contingency Table / Experimental Design
 #### Linear Models / Non-linear Models / Simple Linear Models / Cov and Corr / ANOVA / ANOVA Contrast / RBD / Non-parametric Testing / Wilcoxon test (Approx. and Exact)
 
+
 ## Computational Statistics Notes
 
 ### Fall 2019 (Sept - Dec)
